@@ -6,9 +6,37 @@ const Part = require('../models/Part');
 
 
 exports.parts_list = (req, res, next) => {
-   
+    async.parallel({
+        parts: function(callback) {
+            Part
+            .find()
+            .exec(callback);    
+        },
+        types: function(callback) {
+            Type.find()
+            .exec(callback);
+        }
+    },
+    function(err, results) {
+        if(err) {return next(err);}
+        res.render('parts_list', {parts:results.parts, types: results.types, allSelected: true});
+    });
 };
 
+exports.part_info = (req, res, next) => {
+    Part
+    .findById(req.params.id)
+    .populate('type')
+    .populate('manufacturer')
+    .exec((err, result) => {
+        if(typeof result === 'undefined') {
+            res.redirect('/shop/parts');
+            return;
+        }
+        if(err) {return next(err);}
+        res.render('part_info', {part_data: result});
+    });
+};
 
 exports.parts_count_by_type = (req, res, next) => {
     let partsCount = {count: 0};
@@ -52,14 +80,6 @@ exports.parts_by_type = (req, res, next) => {
     });
 };
 
-// exports.parts_by_type = (req, res, next) => {
-//     Part
-//     .find({type: req.params.id})
-//     .populate('type')
-//     .exec((err, parts) => {
-//         if(err) {return next(err);}
-//         console.log(parts);
-//         console.log(parts.length);
-//         res.render('parts_list',{parts:parts});
-//     });
-// }
+exports.part_update_get = (req, res, next) => {
+    res.render('part-form');
+};

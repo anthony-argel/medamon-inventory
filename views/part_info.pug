@@ -1,0 +1,17 @@
+extends layout.pug
+
+block content
+    div.content
+        div.left_info
+            h1 #{part_data.name}
+            a(href=part_data.manufacturer.url) #{part_data.manufacturer.name}
+            img(src='https://images.unsplash.com/photo-1592664474496-8f2c35acd655?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTd8fGNwdXxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60', alt=`An image of ${part_data.name} sold by ${part_data.manufacturer.name}.`)
+        div.right_info
+            p Stock: #{part_data.stock}          
+            a(href=part_data.type.url) #{part_data.type.name} 
+            p $#{part_data.price.toFixed(2)}
+            p #{part_data.description}
+
+            div.admin-options
+                a(href=part_data.update) Update Part
+                a(href='/') Delete Part

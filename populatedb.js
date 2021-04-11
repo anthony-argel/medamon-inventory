@@ -172,7 +172,7 @@ function createParts(cb) {
             createPart("kShield T20", manufacturers[2], types[3], 50.00, "A large black shield.", 17, callback);
         },
         function(callback) {
-            createPart("Shinji's Regret", manufacturers[1], types[4], 20.00, "Shoot white acide that erodes an enemies armor. May cause instability depending on the logic chip installed.", 30, callback);
+            createPart("Shinji's Regret", manufacturers[1], types[4], 20.00, "Shoot white acide that erodes an enemy's armor. May cause instability depending on the logic chip installed.", 30, callback);
         },
         function(callback) {
             createPart("Vibriz", manufacturers[1], types[4], 20.00, "A vibrating sword. Works well against thin shields.", 20, callback);

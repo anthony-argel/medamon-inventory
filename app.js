@@ -12,7 +12,6 @@ var app = express();
 
 //db
 let mongoose = require('mongoose');
-// NOTE: mongoDB variable should be here.
 mongoose.connect(mongoDB, {useNewUrlParser:true, useUnifiedTopology: true});
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));

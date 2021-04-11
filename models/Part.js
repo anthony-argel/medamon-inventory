@@ -16,4 +16,10 @@ PartSchema
     return '/shop/part/' + this._id;
 });
 
+PartSchema
+.virtual('update')
+.get(function() {
+    return '/shop/part/update/' + this._id;
+});
+
 module.exports = mongoose.model('Part', PartSchema);

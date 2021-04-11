@@ -23,3 +23,52 @@ nav a {
   text-decoration: none;
   color:white;
 }
+
+nav a:hover {
+  color:white;
+}
+
+/*parts_list*/
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content h1 {
+  font-size: 2.5vw;
+}
+
+.content p, .content a {
+  font-size: 1.2vw;
+}
+
+.left_info {
+  display: flex;
+  flex-direction: column;
+}
+
+.right_info {
+  margin-left: 2vw;
+  min-width: 60vw;
+  max-width:60vw
+}
+
+.content img {
+  max-width: 30vw;
+}
+
+.content a {
+  color: darkgreen;
+  text-decoration: none;
+}
+
+.content a:hover {
+  font-size: 1.4vw;
+}
+
+.admin-options{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
