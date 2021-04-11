@@ -1,0 +1,16 @@
+extends layout
+block extra-stylings
+    link(rel='stylesheet', href='/stylesheets/catalog.css')
+
+block content
+
+    div(class="parts-index")
+        div(class="part") 
+            img(src='https://images.unsplash.com/photo-1592664474496-8f2c35acd655?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTd8fGNwdXxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60')
+            a(href='/shop/parts/') All (#{totalParts})
+        each val, key in partsCount 
+            if(key !== 'count')
+                div(class="part")
+                    img(src='https://images.unsplash.com/photo-1592664474496-8f2c35acd655?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTd8fGNwdXxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60')
+                    a(href='/shop/parts/type/'+val.id) #{key} (#{val.count})
+        

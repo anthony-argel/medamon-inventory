@@ -1,0 +1,65 @@
+nav {
+    width: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.parts-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.part {
+    display: flex;
+    flex-direction: column;
+    margin: 0 1vh;
+    padding: 1vw;
+}
+
+img {
+    width: 15vw;
+    margin-bottom: 1vh;
+}
+
+h1 {
+  text-align: center;
+  font-size: 3vw;
+}
+
+.types {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(203, 211, 201);
+    padding: .5vh 0;
+    width:100vw;
+    margin-bottom: 1vw;
+}
+
+li {
+    font-size: 1.2vw;
+    margin: 0 1vw;
+}
+
+.selected {
+    font-size: 1.3vw;
+    color:red;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+a:hover {
+    color:green;
+}
+
+.part-name {
+    font-size: 1.3vw;
+}
