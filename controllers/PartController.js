@@ -3,7 +3,7 @@ const Manufacturer = require('../models/Manufacturer');
 const Type = require('../models/Type');
 const Part = require('../models/Part');
 
-
+const { body,validationResult } = require('express-validator');
 
 exports.parts_list = (req, res, next) => {
     async.parallel({
@@ -81,5 +81,74 @@ exports.parts_by_type = (req, res, next) => {
 };
 
 exports.part_update_get = (req, res, next) => {
-    res.render('part-form');
-};
+    async.parallel({
+        part: function(callback) {
+            Part
+            .findById(req.params.id)
+            .exec(callback);
+        },
+        manufacturers: function(callback) {
+            Manufacturer
+            .find()
+            .exec(callback);
+        },
+        types: function(callback) {
+            Type.find().exec(callback);
+        }
+    },
+    (err, results) => {
+        if(err) {return next(err);}
+        res.render('part_form', {part: results.part, manufacturers: results.manufacturers, types: results.types});
+    });
+}
+
+exports.part_update_post = [
+    body('name', 'Name must not be empty.').trim().isLength({min:1}).escape(),
+    body('description', 'Description must not be empty.').trim().isLength({min:1}).escape(),
+    body('price', 'Price must not be negative.').isFloat({min:0}).escape(),
+    body('stock', 'Stock must not be negative.').isInt({min:0}).escape(),
+    body('manufacturer', 'Manufacturer must not be empty.').trim().isLength({ min: 1 }).escape(),
+    body('type', 'Type must not be empty').trim().isLength({min:1}).escape(),
+    (req, res, next) => {
+        const errors = validationResult(req);
+
+        let part = new Part({
+            name: req.body.name,
+            manufacturer: req.body.manufacturer,
+            type: req.body.type,
+            price: req.body.price,
+            description: req.body.description,
+            stock: req.body.stock,
+            _id: req.params.id
+        });
+
+        if(!errors.isEmpty()){
+            async.parallel({
+                part: function(callback) {
+                    Part
+                    .findById(req.params.id)
+                    .exec(callback);
+                },
+                manufacturers: function(callback) {
+                    Manufacturer
+                    .find()
+                    .exec(callback);
+                },
+                types: function(callback) {
+                    Type.find().exec(callback);
+                }
+            },
+            (err, results) => {
+                if(err) {return next(err);}
+                res.render('part_form', {part: results.part, manufacturers: results.manufacturers, types: results.types, errors:errors.array()});
+            });
+            return;
+        }
+        else {
+            Part.findByIdAndUpdate(req.params.id, part, {}, function(err, thePart) {
+                if(err) {return next(err);}
+                res.redirect(thePart.url);
+            })
+        }
+    }
+]

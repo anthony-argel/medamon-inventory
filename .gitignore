@@ -102,8 +102,3 @@ dist
 
 # TernJS port file
 .tern-port
-
-# to hide db.
-app.js
-/app.js
-.app.js
