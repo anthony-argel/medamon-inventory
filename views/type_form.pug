@@ -1,0 +1,21 @@
+extends layout
+
+block content
+    div.content-col
+        h1 #{title}
+        form(method='POST' action='')
+            div.form-group
+                label(for='name') Name: 
+                br
+                input#name.form-control(type='text', placeholder="Name of type" name='name' required='true' value=(undefined===type ? '' : type.name))
+            div.form-group
+                label(for='description') Description: 
+                br
+                textarea#description.form-control(type='textarea', placeholder='Description of type' name='description' required='true') #{undefined===type ? '' : type.description}
+            div.form-group
+                button(type='submit') Submit
+
+        if errors
+            ul(style="margin-top:1vw;")
+                for error in errors
+                    li!= error.msg

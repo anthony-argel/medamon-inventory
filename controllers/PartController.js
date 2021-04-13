@@ -98,7 +98,7 @@ exports.part_update_get = (req, res, next) => {
     },
     (err, results) => {
         if(err) {return next(err);}
-        res.render('part_form', {part: results.part, manufacturers: results.manufacturers, types: results.types});
+        res.render('part_form', {title:"Update Part", part: results.part, manufacturers: results.manufacturers, types: results.types});
     });
 }
 
@@ -140,7 +140,7 @@ exports.part_update_post = [
             },
             (err, results) => {
                 if(err) {return next(err);}
-                res.render('part_form', {part: results.part, manufacturers: results.manufacturers, types: results.types, errors:errors.array()});
+                res.render('part_form', {title:"Update Part", part: results.part, manufacturers: results.manufacturers, types: results.types, errors:errors.array()});
             });
             return;
         }
@@ -151,4 +151,82 @@ exports.part_update_post = [
             })
         }
     }
-]
+];
+
+exports.part_create_get = (req, res, next) => {
+    async.parallel({
+        manufacturers: function(callback) {
+            Manufacturer.find().exec(callback);
+        },
+        types: function(callback) {
+            Type.find().exec(callback);
+        }
+    },
+    (err, results) => {
+        if(err) {return next(err);}
+        res.render('part_form', {title:"Add Part",manufacturers: results.manufacturers, types: results.types});
+    });
+};
+
+exports.part_create_post = [
+    body('name', 'Name must not be empty.').trim().isLength({min:1}).escape(),
+    body('description', 'Description must not be empty.').trim().isLength({min:1}).escape(),
+    body('price', 'Price must not be negative.').isFloat({min:0}).escape(),
+    body('stock', 'Stock must not be negative.').isInt({min:0}).escape(),
+    body('manufacturer', 'Manufacturer must not be empty.').trim().isLength({ min: 1 }).escape(),
+    body('type', 'Type must not be empty').trim().isLength({min:1}).escape(),
+    (req, res, next) => {
+        const errors = validationResult(req);
+
+        let part = new Part({
+            name: req.body.name,
+            manufacturer: req.body.manufacturer,
+            type: req.body.type,
+            price: req.body.price,
+            description: req.body.description,
+            stock: req.body.stock
+        });
+
+        if(!errors.isEmpty()){
+            async.parallel({
+                part: function(callback) {
+                    Part
+                    .findById(req.params.id)
+                    .exec(callback);
+                },
+                manufacturers: function(callback) {
+                    Manufacturer
+                    .find()
+                    .exec(callback);
+                },
+                types: function(callback) {
+                    Type.find().exec(callback);
+                }
+            },
+            (err, results) => {
+                if(err) {return next(err);}
+                res.render('part_form', {title:"Add Part", part: results.part, manufacturers: results.manufacturers, types: results.types, errors:errors.array()});
+            });
+            return;
+        }
+        else {
+            // check if a part with that name and manufacturer already exists
+            Part.findOne({'name': req.body.name, 'manufacturer':req.body.manufacturer})
+            .exec((err, partFound) => {
+                if(err) {return next(err);}
+
+                if(partFound){
+                    res.redirect(partFound.url);
+                }
+                else {
+                    part.save(function (err) {
+                        if (err) { return next(err); }
+                           //successful - redirect to new book record.
+                           res.redirect(part.url);
+                    });
+                }
+            });
+            
+        }
+    }
+];

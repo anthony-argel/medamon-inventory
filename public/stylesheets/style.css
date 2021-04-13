@@ -39,7 +39,7 @@ nav a:hover {
   font-size: 2.5vw;
 }
 
-.content p, .content a {
+.content p, .content a, .content-col a {
   font-size: 1.2vw;
 }
 
@@ -58,12 +58,12 @@ nav a:hover {
   max-width: 30vw;
 }
 
-.content a {
+.content a, .content-col a {
   color: darkgreen;
   text-decoration: none;
 }
 
-.content a:hover {
+.content a:hover, .content-col a:hover {
   font-size: 1.4vw;
 }
 
@@ -83,4 +83,18 @@ nav a:hover {
 
 .form-group {
   margin-top: 1vw;
+}
+
+.content-col p {
+  margin-top: 1vw;
+  font-size: 1.2vw;
+}
+
+textarea, input {
+  min-width: 30vw;
+}
+
+textarea {
+  min-height: 20vh;
+
 }

@@ -50,3 +50,16 @@ a {
   a:hover {
     color: green;
   }
+
+.create-options {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(203, 211, 201);
+  padding: .5vh 0;
+}
+
+.create-options a {
+  font-size:1.2vw;
+  margin: 0 1vw;
+}

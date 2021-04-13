@@ -3,14 +3,20 @@ block extra-stylings
     link(rel='stylesheet', href='/stylesheets/catalog.css')
 
 block content
-
+    div(class="create-options")
+        a(href='/shop/types') View All Types
+        a(href='/shop/part/create') Add Part
+        a(href='/') Add Manufacturer 
+        a(href='/shop/type/create') Add Type
     div(class="parts-index")
         div(class="part") 
             img(src='https://images.unsplash.com/photo-1592664474496-8f2c35acd655?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTd8fGNwdXxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60')
             a(href='/shop/parts/') All (#{totalParts})
+        //- partsCount.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
         each val, key in partsCount 
             if(key !== 'count')
-                div(class="part")
-                    img(src='https://images.unsplash.com/photo-1592664474496-8f2c35acd655?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTd8fGNwdXxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60')
-                    a(href='/shop/parts/type/'+val.id) #{key} (#{val.count})
+                if(val.count > 0)
+                    div(class="part")
+                        img(src='https://images.unsplash.com/photo-1592664474496-8f2c35acd655?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTd8fGNwdXxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60')
+                        a(href='/shop/parts/type/'+val.id) #{key} (#{val.count})
         
