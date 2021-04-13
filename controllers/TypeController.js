@@ -26,7 +26,8 @@ exports.type_update_get = (req, res, next) => {
 exports.type_update_post = [
     body('name', 'Name must not be empty.').trim().isLength({min:1}).escape(),
     body('description','Description must not be empty.').trim().isLength({min:1}).escape(),
-    body('imgurl', 'Imgurl must not be empty').trim().isLength({min:1}),
+    body('imgurl', 'Please insert an img url here').isURL(),
+    body('password', 'Input the correct password').equals(process.env.ADMINPASSWORD),
     (req, res, next) => {
         const errors = validationResult(req);
         let type = new Type({
@@ -66,29 +67,49 @@ exports.type_delete_get = (req, res, next) => {
     });
 };
 
-exports.type_delete_post = (req, res, next) => {
-    async.parallel({
-        type: function(callback) {
-            Type.findById(req.params.id).exec(callback);
-        },
-        parts: function(callback) {
-            Part.find({type:req.params.id}).exec(callback);
-        }
-    },
-    (err, results) => {
-        if(err) {return next(err);}
-
-        if(results.parts.length >0) {
-            res.render('general_delete', {title:'Delete Type', data:result.type, part: result.part});
-        }
-        else {
-            Type.findByIdAndRemove(req.params.id, function deleteType(err) {
+exports.type_delete_post = [
+    body('password', 'Input the correct password').equals(process.env.ADMINPASSWORD),
+    (req, res, next) => {
+        const errors = validationResult(req);
+        if(!errors.isEmpty()) {
+            async.parallel({
+                part: function(callback) {
+                    Part.find({type: req.params.id}).exec(callback);
+                },
+                type: function(callback) {
+                    Type.findById(req.params.id).exec(callback);     
+                }      
+            },
+            (err, result) => {
                 if(err) {return next(err);}
-                res.redirect('/shop/types');
+                res.render('general_delete', {title:'Delete Type', data:result.type, part: result.part, errors:errors.array()});
             });
         }
-    });
-};
+        else {
+            async.parallel({
+                type: function(callback) {
+                    Type.findById(req.params.id).exec(callback);
+                },
+                parts: function(callback) {
+                    Part.find({type:req.params.id}).exec(callback);
+                }
+            },
+            (err, results) => {
+                if(err) {return next(err);}
+        
+                if(results.parts.length >0) {
+                    res.render('general_delete', {title:'Delete Type', data:result.type, part: result.part});
+                }
+                else {
+                    Type.findByIdAndRemove(req.params.id, function deleteType(err) {
+                        if(err) {return next(err);}
+                        res.redirect('/shop/types');
+                    });
+                }
+            });
+        }
+    }
+];
 
 exports.type_create_get = (req, res, next) => {
     res.render('general_form');
@@ -97,7 +118,8 @@ exports.type_create_get = (req, res, next) => {
 exports.type_create_post = [
     body('name', 'Name must not be empty.').trim().isLength({min:1}).escape(),
     body('description','Description must not be empty.').trim().isLength({min:1}).escape(),
-    body('imgurl', 'Imgurl must not be empty').trim().isLength({min:1}),
+    body('imgurl', 'Please insert an img url here').isURL(),
+    body('password', 'Input the correct password').equals(process.env.ADMINPASSWORD),
    (req, res, next) => {
        const errors = validationResult(req);
 

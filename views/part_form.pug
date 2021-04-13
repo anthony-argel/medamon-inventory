@@ -54,6 +54,10 @@ block content
                         else
                             option(value=t._id) #{t.name}
             div.form-group
+                label(for='password') Admin Password: 
+                br
+                input#password.form-control(type='input', placeholder='password' name='password' required='true')
+            div.form-group
                 button(type='submit') Submit
 
         if errors

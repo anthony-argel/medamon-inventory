@@ -26,7 +26,8 @@ exports.manufacturer_update_get = (req, res, next) => {
 exports.manufacturer_update_post = [
     body('name', 'Name must not be empty.').trim().isLength({min:1}).escape(),
     body('description','Description must not be empty.').trim().isLength({min:1}).escape(),
-    body('imgurl', 'Imgurl must not be empty').trim().isLength({min:1}),
+    body('imgurl', 'A proper image URL is required.').isURL(),
+    body('password', 'Input the correct password').equals(process.env.ADMINPASSWORD),
     (req, res, next) => {
         const errors = validationResult(req);
         let manufacturer = new Manufacturer({
@@ -66,30 +67,32 @@ exports.manufacturer_delete_get = (req, res, next) => {
     });
 };
 
-exports.manufacturer_delete_post = (req, res, next) => {
-    async.parallel({
-        Manufacturer: function(callback) {
-            Manufacturer.findById(req.params.id).exec(callback);
+exports.manufacturer_delete_post = [
+    body('password', 'Input the correct password').equals(process.env.ADMINPASSWORD),
+    (req, res, next) => {
+        async.parallel({
+            Manufacturer: function(callback) {
+                Manufacturer.findById(req.params.id).exec(callback);
+            },
+            parts: function(callback) {
+                Part.find({Manufacturer:req.params.id}).exec(callback);
+            }
         },
-        parts: function(callback) {
-            Part.find({Manufacturer:req.params.id}).exec(callback);
-        }
-    },
-    (err, results) => {
-        if(err) {return next(err);}
+        (err, results) => {
+            if(err) {return next(err);}
 
-        if(results.parts.length >0) {
-            res.render('Manufacturer_delete', {title:'Delete Manufacturer', Manufacturer:result.Manufacturer, part: result.part});
-        }
-        else {
-            Manufacturer.findByIdAndRemove(req.params.id, function deleteManufacturer(err) {
-                if(err) {return next(err);}
-                res.redirect('/shop/Manufacturers'); 
-            });
-        }    
-    });
-};
-
+            if(results.parts.length >0) {
+                res.render('Manufacturer_delete', {title:'Delete Manufacturer', Manufacturer:result.Manufacturer, part: result.part});
+            }
+            else {
+                Manufacturer.findByIdAndRemove(req.params.id, function deleteManufacturer(err) {
+                    if(err) {return next(err);}
+                    res.redirect('/shop/Manufacturers'); 
+                });
+            }    
+        });
+    }
+];
 
 
 exports.manufacturer_list = (req, res, next) => {
@@ -106,7 +109,8 @@ exports.manufacturer_create_get = (req, res, next) => {
 exports.manufacturer_create_post = [
     body('name', 'Name must not be empty.').trim().isLength({min:1}).escape(),
     body('description','Description must not be empty.').trim().isLength({min:1}).escape(),
-    body('imgurl', 'Imgurl must not be empty').trim().isLength({min:1}),
+    body('imgurl', 'A proper image URL is required.').isURL(),
+    body('password', 'Input the correct password').equals(process.env.ADMINPASSWORD),
    (req, res, next) => {
        const errors = validationResult(req);
 

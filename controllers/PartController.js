@@ -109,7 +109,8 @@ exports.part_update_post = [
     body('stock', 'Stock must not be negative.').isInt({min:0}).escape(),
     body('manufacturer', 'Manufacturer must not be empty.').trim().isLength({ min: 1 }).escape(),
     body('type', 'Type must not be empty').trim().isLength({min:1}).escape(),
-    body('imgurl', 'Imgurl must not be empty').trim().isLength({min:1}),
+    body('imgurl', 'A proper image URL is required.').isURL(),
+    body('password', 'Input the correct password').equals(process.env.ADMINPASSWORD),
     (req, res, next) => {
         const errors = validationResult(req);
 
@@ -177,7 +178,8 @@ exports.part_create_post = [
     body('stock', 'Stock must not be negative.').isInt({min:0}).escape(),
     body('manufacturer', 'Manufacturer must not be empty.').trim().isLength({ min: 1 }).escape(),
     body('type', 'Type must not be empty').trim().isLength({min:1}).escape(),
-    body('imgurl', 'Imgurl must not be empty').trim().isLength({min:1}),
+    body('imgurl', 'A proper image URL is required.').isURL(),
+    body('password', 'Input the correct password').equals(process.env.ADMINPASSWORD),
     (req, res, next) => {
         const errors = validationResult(req);
 
@@ -242,14 +244,17 @@ exports.part_delete_get = (req, res, next) => {
     });
 };
 
-exports.part_delete_post = (req, res, next) => {
-    Part.findById(req.params.id).exec((err, result)=> {
-        if(err) {return next(err);}
-        if(result !== undefined) {
-            Part.findByIdAndRemove(req.params.id, function deletePart(err) {
-                if(err) {return next(err);}
-                res.redirect('/shop/parts');
-            })
-        }
-    });
-};
+exports.part_delete_post = [
+    body('password', 'Input the correct password').equals(process.env.ADMINPASSWORD),
+    (req, res, next) => {
+        Part.findById(req.params.id).exec((err, result)=> {
+            if(err) {return next(err);}
+            if(result !== undefined) {
+                Part.findByIdAndRemove(req.params.id, function deletePart(err) {
+                    if(err) {return next(err);}
+                    res.redirect('/shop/parts');
+                })
+            }
+        });
+    }
+];

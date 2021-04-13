@@ -12,4 +12,11 @@ block content
             p Are you sure you want to delete #{data.name}?
             form(method='POST' action='')
                 input#id.form-control(type='hidden' name='typeid' required='true' value=data._id)
+                div.form-group
+                    label(for='password') Admin Password: 
+                    input#password.form-control(type='input', placeholder='password' name='password' required='true')
                 button(type='submit') DELETE
+        if errors
+            ul(style="margin-top:1vw;")
+                for error in errors
+                    li!= error.msg
