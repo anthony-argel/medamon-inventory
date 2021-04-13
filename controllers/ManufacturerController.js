@@ -26,12 +26,14 @@ exports.manufacturer_update_get = (req, res, next) => {
 exports.manufacturer_update_post = [
     body('name', 'Name must not be empty.').trim().isLength({min:1}).escape(),
     body('description','Description must not be empty.').trim().isLength({min:1}).escape(),
+    body('imgurl', 'Imgurl must not be empty').trim().isLength({min:1}),
     (req, res, next) => {
         const errors = validationResult(req);
         let manufacturer = new Manufacturer({
             name: req.body.name,
             description: req.body.description,
-            _id: req.params.id
+            imgurl: req.body.imgurl,
+            _id: req.params.id 
         });
 
         if(!errors.isEmpty()) {
@@ -93,7 +95,7 @@ exports.manufacturer_delete_post = (req, res, next) => {
 exports.manufacturer_list = (req, res, next) => {
     Manufacturer.find().exec((err, result)=> {
         if(err) {return next(err);}
-        res.render('general_list', {data:result});
+        res.render('general_list', {title:"Manufacturers", data:result});
     })
 };
 
@@ -104,12 +106,14 @@ exports.manufacturer_create_get = (req, res, next) => {
 exports.manufacturer_create_post = [
     body('name', 'Name must not be empty.').trim().isLength({min:1}).escape(),
     body('description','Description must not be empty.').trim().isLength({min:1}).escape(),
+    body('imgurl', 'Imgurl must not be empty').trim().isLength({min:1}),
    (req, res, next) => {
        const errors = validationResult(req);
 
        let manufacturer = new Manufacturer({
            name: req.body.name,
-           description: req.body.description
+           description: req.body.description,
+           imgurl: req.body.imgurl
        })
        if(!errors.isEmpty()) {
         res.render('general_form', {title:"Add Manufacturer", errors:errors.array()});
@@ -125,10 +129,10 @@ exports.manufacturer_create_post = [
                else {
                    manufacturer.save(function(err) {
                        if(err) {return next(err);}
-                       res.redirect(manufacturer.url);
+                       res.redirect(manufacturer.url); 
                    }); 
                }
            });
-       }
+       } 
    }
 ];

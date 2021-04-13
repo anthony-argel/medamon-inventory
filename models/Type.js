@@ -3,7 +3,8 @@ let Schema = mongoose.Schema;
 
 const TypeSchema = new Schema({
     name: {type:String, minlength:1, required:true},
-    description: {type:String, minlength:1, required:true}
+    description: {type:String, minlength:1, required:true},
+    imgurl: {type:String, min:1, required: true}
 });
 
 TypeSchema

@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 const ManufacturerSchema = new Schema({
     name: {type:String, minlength:1, maxlength:25, required:true},
-    description: {type:String, minlength:1, required:true}
+    description: {type:String, minlength:1, required:true},
+    imgurl: {type:String, minlength:1, required: true}
 });
 
 ManufacturerSchema

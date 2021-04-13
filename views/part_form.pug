@@ -9,6 +9,10 @@ block content
                 br
                 input#name.form-control(type='text', placeholder='Name of part' name='name' required='true' value=(undefined===part ? '' : part.name))
             div.form-group
+                label(for='imgurl') Image URL: 
+                br
+                input#imgurl.form-control(type='text' placeholder='URL of image' name='imgurl' required='true' value=(undefined===part ? '' : part.imgurl))
+            div.form-group
                 label(for='description') Description: 
                 br
                 textarea#description.form-control(type='textarea', placeholder='Description of part' name='description' required='true') #{(undefined===part) ? '' : part.description}

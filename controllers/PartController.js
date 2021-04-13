@@ -50,7 +50,7 @@ exports.parts_count_by_type = (req, res, next) => {
             .exec((err, newCount) => {
                 if(err) {return next(err);}
                 totalParts += newCount;
-                partsCount[types[i].name] = {count:newCount, url:types[i].url, id:types[i]._id};
+                partsCount[types[i].name] = {imgurl: types[i].imgurl,count:newCount, url:types[i].url, id:types[i]._id};
                 partsCount.count++;
                 if(partsCount.count === types.length) {
                     res.render('catalog', {title: 'Current Inventory', partsCount: partsCount, totalParts: totalParts});
@@ -109,6 +109,7 @@ exports.part_update_post = [
     body('stock', 'Stock must not be negative.').isInt({min:0}).escape(),
     body('manufacturer', 'Manufacturer must not be empty.').trim().isLength({ min: 1 }).escape(),
     body('type', 'Type must not be empty').trim().isLength({min:1}).escape(),
+    body('imgurl', 'Imgurl must not be empty').trim().isLength({min:1}),
     (req, res, next) => {
         const errors = validationResult(req);
 
@@ -119,6 +120,7 @@ exports.part_update_post = [
             price: req.body.price,
             description: req.body.description,
             stock: req.body.stock,
+            imgurl:req.body.imgurl,
             _id: req.params.id
         });
 
@@ -175,6 +177,7 @@ exports.part_create_post = [
     body('stock', 'Stock must not be negative.').isInt({min:0}).escape(),
     body('manufacturer', 'Manufacturer must not be empty.').trim().isLength({ min: 1 }).escape(),
     body('type', 'Type must not be empty').trim().isLength({min:1}).escape(),
+    body('imgurl', 'Imgurl must not be empty').trim().isLength({min:1}),
     (req, res, next) => {
         const errors = validationResult(req);
 
@@ -184,7 +187,8 @@ exports.part_create_post = [
             type: req.body.type,
             price: req.body.price,
             description: req.body.description,
-            stock: req.body.stock
+            stock: req.body.stock,
+            imgurl: req.body.imgurl
         });
 
         if(!errors.isEmpty()){
@@ -230,3 +234,22 @@ exports.part_create_post = [
         }
     }
 ];
+
+exports.part_delete_get = (req, res, next) => {
+    Part.findById(req.params.id).exec((err, result)=> {
+        if(err) {return next(err);}
+        res.render('general_delete', {title:"Delete Part", data: result});  
+    });
+};
+
+exports.part_delete_post = (req, res, next) => {
+    Part.findById(req.params.id).exec((err, result)=> {
+        if(err) {return next(err);}
+        if(result !== undefined) {
+            Part.findByIdAndRemove(req.params.id, function deletePart(err) {
+                if(err) {return next(err);}
+                res.redirect('/shop/parts');
+            })
+        }
+    });
+};

@@ -19,25 +19,27 @@ exports.type_update_get = (req, res, next) => {
     .exec((err, results) => {
         if(err) {return next(err);}
 
-        res.render('type_form', {title:"Update Type", type: results});
+        res.render('general_form', {title:"Update Type", data: results});
     });
 };
 
 exports.type_update_post = [
     body('name', 'Name must not be empty.').trim().isLength({min:1}).escape(),
     body('description','Description must not be empty.').trim().isLength({min:1}).escape(),
+    body('imgurl', 'Imgurl must not be empty').trim().isLength({min:1}),
     (req, res, next) => {
         const errors = validationResult(req);
         let type = new Type({
             name: req.body.name,
             description: req.body.description,
+            imgurl: req.body.imgurl,
             _id: req.params.id
         });
 
         if(!errors.isEmpty()) {
             Type.findById(req.params.id).exec((err, results)=> {
                 if(err) {return next(err);}
-                res.render('type_form', {title:"Update Type", type:results, errors:errors.array()});
+                res.render('general_form', {title:"Update Type", data:results, errors:errors.array()});
             })
         }
         else {
@@ -95,15 +97,17 @@ exports.type_create_get = (req, res, next) => {
 exports.type_create_post = [
     body('name', 'Name must not be empty.').trim().isLength({min:1}).escape(),
     body('description','Description must not be empty.').trim().isLength({min:1}).escape(),
+    body('imgurl', 'Imgurl must not be empty').trim().isLength({min:1}),
    (req, res, next) => {
        const errors = validationResult(req);
 
        let type = new Type({
            name: req.body.name,
-           description: req.body.description
+           description: req.body.description,
+           imgurl: req.body.imgurl
        })
        if(!errors.isEmpty()) {
-        res.render('type_form', {title:"Add Type", errors:errors.array()});
+        res.render('general_form', {title:"Add Type", errors:errors.array()});
        }
        else {
            Type.findOne({'name':req.body.name})
@@ -127,6 +131,6 @@ exports.type_create_post = [
 exports.types_list = (req, res, next) => {
     Type.find().exec((err, result)=> {
         if(err) {return next(err);}
-        res.render('general_list', {data :result});
+        res.render('general_list', {title: "Types", data :result});
     })
 };

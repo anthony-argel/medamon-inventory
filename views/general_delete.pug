@@ -3,7 +3,7 @@ extends layout
 block content
     div.content-col
         h1 #{title}
-        if part.length
+        if (part !== undefined) && part.length
             p You need to delete all parts labelled as #{data.name} before deleting it.
             p The parts:
             for p in part

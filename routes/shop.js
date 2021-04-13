@@ -22,6 +22,8 @@ router.post('/part/create', part_controller.part_create_post);
 router.get('/part/update/:id', part_controller.part_update_get);
 router.post('/part/update/:id', part_controller.part_update_post);
 // delete
+router.get('/part/delete/:id', part_controller.part_delete_get);
+router.post('/part/delete/:id', part_controller.part_delete_post);
 // read
 router.get('/part/:id', part_controller.part_info);
 // Type
