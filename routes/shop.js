@@ -8,6 +8,7 @@ let router = express.Router();
 
 const part_controller = require('../controllers/PartController');
 const type_controller = require('../controllers/TypeController');
+const manufacturer_controller = require('../controllers/ManufacturerController');
 
 // PARTS
 // catalog
@@ -39,4 +40,21 @@ router.get('/type/delete/:id', type_controller.type_delete_get);
 router.post('/type/delete/:id', type_controller.type_delete_post);
 // read
 router.get('/type/:id', type_controller.type_info);
+
+
+//manufacturer
+router.get('/manufacturers', manufacturer_controller.manufacturer_list);
+// create
+router.get('/manufacturer/create', manufacturer_controller.manufacturer_create_get);
+router.post('/manufacturer/create', manufacturer_controller.manufacturer_create_post);
+// update
+router.get('/manufacturer/update/:id', manufacturer_controller.manufacturer_update_get);
+router.post('/manufacturer/update/:id', manufacturer_controller.manufacturer_update_post);
+// delete 
+router.get('/manufacturer/delete/:id', manufacturer_controller.manufacturer_delete_get);
+router.post('/manufacturer/delete/:id', manufacturer_controller.manufacturer_delete_post); 
+// read
+router.get('/manufacturer/:id', manufacturer_controller.manufacturer_info);
+
+
 module.exports = router;

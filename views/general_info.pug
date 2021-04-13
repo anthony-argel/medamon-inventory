@@ -3,9 +3,9 @@ extend layout
 block content 
     div.content-col
         img(src='https://images.unsplash.com/photo-1592664474496-8f2c35acd655?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTd8fGNwdXxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60' alt='Image showing what the part type looks like.')
-        p #{type.name}
-        p(style="width:40vw;") #{type.description}
+        p #{data.name}
+        p(style="width:40vw;") #{data.description}
         div.right_info
             div.admin-options
-                a(href=type.update) Update Part
-                a(href=type.delete) Delete Part
+                a(href=data.update) Update #{datatype}
+                a(href=data.delete) Delete #{datatype}

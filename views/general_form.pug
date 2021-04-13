@@ -7,11 +7,11 @@ block content
             div.form-group
                 label(for='name') Name: 
                 br
-                input#name.form-control(type='text', placeholder="Name of type" name='name' required='true' value=(undefined===type ? '' : type.name))
+                input#name.form-control(type='text', placeholder="Name of data" name='name' required='true' value=(undefined===data ? '' : data.name))
             div.form-group
                 label(for='description') Description: 
                 br
-                textarea#description.form-control(type='textarea', placeholder='Description of type' name='description' required='true') #{undefined===type ? '' : type.description}
+                textarea#description.form-control(type='textarea', placeholder='Description of data' name='description' required='true') #{undefined===data ? '' : data.description}
             div.form-group
                 button(type='submit') Submit
 

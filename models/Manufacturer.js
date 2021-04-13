@@ -3,8 +3,6 @@ const Schema = mongoose.Schema;
 
 const ManufacturerSchema = new Schema({
     name: {type:String, minlength:1, maxlength:25, required:true},
-    ranking: {type:Number, min:1},
-    foundingDate: {type:Date},
     description: {type:String, minlength:1, required:true}
 });
 
@@ -14,5 +12,16 @@ ManufacturerSchema
     return '/shop/manufacturer/' + this._id;
 });
 
+ManufacturerSchema
+.virtual('update')
+.get(function() {
+    return '/shop/manufacturer/update/' + this._id;
+});
+
+ManufacturerSchema
+.virtual('delete')
+.get(function() {
+    return '/shop/manufacturer/delete/' + this._id;
+}); 
 
 module.exports = mongoose.model('Manufacturer', ManufacturerSchema);

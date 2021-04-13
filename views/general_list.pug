@@ -1,0 +1,8 @@
+extend layout
+
+block content
+    div.content-col
+        h1 #{title}
+        - data.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+        for d in data
+            a(href=d.url) #{d.name}

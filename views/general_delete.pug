@@ -1,0 +1,15 @@
+extends layout 
+
+block content
+    div.content-col
+        h1 #{title}
+        if part.length
+            p You need to delete all parts labelled as #{data.name} before deleting it.
+            p The parts:
+            for p in part
+                a(href=p.url) #{p.name}
+        else
+            p Are you sure you want to delete #{data.name}?
+            form(method='POST' action='')
+                input#id.form-control(type='hidden' name='typeid' required='true' value=data._id)
+                button(type='submit') DELETE

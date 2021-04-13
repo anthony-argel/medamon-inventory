@@ -1,8 +1,0 @@
-extend layout
-
-block content
-    div.content-col
-        h1 Types
-        - types.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
-        for t in types
-            a(href=t.url) #{t.name}

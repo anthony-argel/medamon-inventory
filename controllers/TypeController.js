@@ -9,7 +9,7 @@ exports.type_info = (req, res, next) => {
     .exec((err, result) => {
         if(err) {return next(err);}
 
-        res.render('type_info', {type: result});
+        res.render('general_info', {data: result, datatype:"type"});
     });
 }
 
@@ -60,7 +60,7 @@ exports.type_delete_get = (req, res, next) => {
     },
     (err, result) => {
         if(err) {return next(err);}
-        res.render('type_delete', {title:'Delete Type', type:result.type, part: result.part});
+        res.render('general_delete', {title:'Delete Type', data:result.type, part: result.part});
     });
 };
 
@@ -77,7 +77,7 @@ exports.type_delete_post = (req, res, next) => {
         if(err) {return next(err);}
 
         if(results.parts.length >0) {
-            res.render('type_delete', {title:'Delete Type', type:result.type, part: result.part});
+            res.render('general_delete', {title:'Delete Type', data:result.type, part: result.part});
         }
         else {
             Type.findByIdAndRemove(req.params.id, function deleteType(err) {
@@ -89,7 +89,7 @@ exports.type_delete_post = (req, res, next) => {
 };
 
 exports.type_create_get = (req, res, next) => {
-    res.render('type_form');
+    res.render('general_form');
 }
 
 exports.type_create_post = [
@@ -127,6 +127,6 @@ exports.type_create_post = [
 exports.types_list = (req, res, next) => {
     Type.find().exec((err, result)=> {
         if(err) {return next(err);}
-        res.render('type_list', {types:result});
+        res.render('general_list', {data :result});
     })
 };
